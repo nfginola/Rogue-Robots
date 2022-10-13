@@ -28,18 +28,17 @@ struct PushConstantElement
     uint gdDescriptor;
     uint perFrameOffset;
     
-    uint perDrawCB;
     uint wireframe;
 };
 CONSTANTS(g_constants, PushConstantElement)
 
+ConstantBuffer<PerDrawData> pdData : register(b1, space0);
 
 static const uint NO_TEXTURE = 0xffffffff;
 
 float4 main(VS_OUT input) : SV_TARGET
-{    
-    // Get per draw dat
-    ConstantBuffer<PerDrawData> perDrawData = ResourceDescriptorHeap[g_constants.perDrawCB];
+{        
+    ConstantBuffer<PerDrawData> perDrawData = pdData;
     
     if (g_constants.wireframe == 1)
         return float4(0.f, 1.f, 0.f, 1.f);
