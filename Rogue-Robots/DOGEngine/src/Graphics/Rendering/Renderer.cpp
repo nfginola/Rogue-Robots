@@ -409,6 +409,59 @@ namespace DOG::gfx
 		}
 
 
+		/*
+			How do I want it?
+
+			MemoryPool graphMemory;
+
+			MultiFrameGraph
+			{
+				// FIF number of graphs
+				vec<RGResourceManager> graphResources;	
+				vec<RenderGraph> graphs;
+			}
+
+
+			3 fif
+			2 backbuffers
+			--> [].size = max_fif * backbuffers
+
+			[ g1, g2 ]
+			--> frame ping pongs between [0] and [1]
+			
+			--> rebuild graph (rebuilds g1, g2)
+			[ m1, m2, g1, g2 ]
+			--> frame ping pongs between [0] and [1] (now m1 and m2)
+			--> when [0] accessed --> [0 + max_fif x 2] released
+
+
+			RGResourceManager->ImportTexture(RG_Resource(Backbuffer), sc[0]);
+
+			for each frame:
+				// Extra functionality to switch out imported resources on the fly during runtime
+				RGResourceManager->SwitchImportedTexture(RG_RESOURCE(Backbuffer), sc->GetNextDrawSurface);
+
+				graph->TryRebuild()
+				{
+					if (!built)
+					{
+						RGResourceManager->Cleanup() --> Send current Declared resources to deferred deletion
+
+						::Build()
+						built = true;
+					}
+				};
+
+				graph->Execute();
+
+
+
+		
+		
+		
+		*/
+
+		
 		m_rg = std::move(std::make_unique<RenderGraph>(m_rd, m_rgResMan.get(), m_bin.get()));
 		auto& rg = *m_rg;
 
@@ -470,7 +523,10 @@ namespace DOG::gfx
 				}
 			};
 
-			struct PassData {};
+			struct PassData 
+			{
+				u32 somethingAllocated{ 0 };
+			};
 			rg.AddPass<PassData>("Forward Pass",
 				[&](PassData&, RenderGraph::PassBuilder& builder)
 				{
@@ -483,8 +539,10 @@ namespace DOG::gfx
 					builder.WriteDepthStencil(RG_RESOURCE(MainDepth), RenderPassAccessType::ClearDiscard,
 						TextureViewDesc(ViewType::DepthStencil, TextureViewDimension::Texture2D, DXGI_FORMAT_D32_FLOAT));
 				},
-				[&](const PassData&, RenderDevice* rd, CommandList cmdl, RenderGraph::PassResources&)
+				[&](const PassData& passData, RenderDevice* rd, CommandList cmdl, RenderGraph::PassResources&)
 				{
+					std::cout << "Doing forward pass with: " << passData.somethingAllocated << "\n";
+
 					rd->Cmd_SetViewports(cmdl, m_globalEffectData.defRenderVPs);
 					rd->Cmd_SetScissorRects(cmdl, m_globalEffectData.defRenderScissors);
 
@@ -502,6 +560,16 @@ namespace DOG::gfx
 
 					rd->Cmd_SetPipeline(cmdl, m_meshPipeWireframeNoCull);
 					drawSubmissions(rd, cmdl, m_noCullWireframeDraws, false, true);
+				},
+				[&](PassData& passData)
+				{
+					passData.somethingAllocated = 10;
+					std::cout << "Pre! Allocating " << passData.somethingAllocated << "\n";
+				},
+				[&](PassData& passData)
+				{
+					passData.somethingAllocated = 10;
+					std::cout << "Post! Deallocating " << passData.somethingAllocated << "\n\n";
 				});
 		}
 
