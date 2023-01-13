@@ -252,7 +252,7 @@ namespace DOG::gfx
 	{
 		HRESULT hr{ S_OK };
 
-		pool.handle = 0;	// always zeroed
+		//pool.handle = 0;	// always zeroed
 
 		D3D12MA::ALLOCATION_DESC ad{};
 		ad.HeapType = to_internal(desc.memType);

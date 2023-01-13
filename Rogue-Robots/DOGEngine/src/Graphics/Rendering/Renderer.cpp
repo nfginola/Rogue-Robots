@@ -852,6 +852,9 @@ namespace DOG::gfx
 			//TestRG_Longwideboi(rg, 64, 8);
 
 
+			TestRG_Longwideboi(rg, 4, 2);
+
+
 			std::cout << "Done submitting\n";
 		}
 
@@ -868,6 +871,13 @@ namespace DOG::gfx
 
 		// Always rebuild
 		s_donez = false;
+
+
+		auto& info = m_rgResMan->GetMemoryInfo();
+		//auto& info = m_rd->GetTotalMemoryInfo().heap[0];
+
+		auto used_allocs_mb = info.allocationBytes / 1048576.f;
+		auto mem_allocated = info.blockBytes / 1048576.f;
 
 		Flush();
 
