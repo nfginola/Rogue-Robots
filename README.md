@@ -19,8 +19,8 @@ My (Nadhif Ginola) [responsibilities](./Nadhif_Responsibilites_Slides.pdf):
 * __Render backend (Direct3D 12)__
 	* Handle based architecture (64 bit uint) for GPU primitives
 	* Fully bindless (using Direct Descriptor Access)
-  * Minimized API surface area
-* __Render Graph__ (Task Graph)
+  * Minimized API surface area   
+* __[Render Graph (Task Graph)](./Nadhif_RenderGraph_TechReport.pdf)__
   * Declarative API
   * Automatic barrier insertion
   * Naive memory aliasing
