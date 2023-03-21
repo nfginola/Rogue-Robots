@@ -24,7 +24,7 @@ My (Nadhif Ginola) [responsibilities](./Nadhif_Responsibilites_Slides.pdf):
 * __[Render Graph (Task Graph)](./Nadhif_RenderGraph_TechReport.pdf)__
   * Declarative API
   * Automatic barrier insertion
-  * Naive memory aliasing
+  * Memory aliasing
   * String-identified resources
   * Used by other contributors to implement techniques (Forward+, Particles, Bloom, etc.)
 * __Render frontend__
