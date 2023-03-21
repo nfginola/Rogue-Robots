@@ -15,7 +15,7 @@ Large Game Project at BTH made over a period of 16-weeks.
 
 [![IMAGE ALT TEXT HERE](https://img.youtube.com/vi/F7JwOPsRCII/0.jpg)](https://www.youtube.com/watch?v=F7JwOPsRCII)
 
-My (Nadhif Ginola) responsibilities: 
+My (Nadhif Ginola) [responsibilities](./Nadhif_Responsibilites_Slides.pdf): 
 * __Render backend (Direct3D 12)__
 	* Handle based architecture (64 bit uint) for GPU primitives
 	* Fully bindless (using Direct Descriptor Access)
